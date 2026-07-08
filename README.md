@@ -1,6 +1,6 @@
 # Outros Créditos/Débitos
 
-Aplicação Angular para o desafio prático de modernização de telas Flex para Angular no módulo contábil de Outros Créditos/Débitos.
+Aplicação Angular para o desafio prático de modernização de telas Flex para Angular no módulo contábil de Outros Créditos/Débitos, agora com backend simples em FastAPI e SQLite.
 
 ## Stack
 
@@ -8,11 +8,46 @@ Aplicação Angular para o desafio prático de modernização de telas Flex para
 - TypeScript
 - Standalone Components
 - Reactive Forms
-- RxJS com serviços mockados em memória
-- Jasmine/Karma para testes unitários
-- CSS/SCSS próprio para aproximar o visual das telas de referência
+- FastAPI
+- SQLite
+- Jasmine/Karma para testes do frontend
+- Pytest para testes do backend
+- CSS/SCSS próprio com tokens globais de design
 
-## Como executar
+## Credenciais
+
+- Usuário: `admin`
+- Senha: `admin`
+
+## Backend
+
+Instale as dependências Python:
+
+```bash
+npm run python -- -m pip install -r backend/requirements.txt
+```
+
+Execute a API:
+
+```bash
+npm run start:backend
+```
+
+A API ficará disponível em `http://127.0.0.1:8000`.
+
+Endpoints principais:
+
+- `GET /health`
+- `POST /auth/login`
+- `GET /lotes`
+- `GET /contas-correntes/{numero}`
+- `POST /lotes/{id_lote}/lancamentos`
+
+O SQLite é criado automaticamente em `backend/data/outros_creditos.db` com dados iniciais equivalentes aos mocks originais.
+
+## Frontend
+
+Em outro terminal:
 
 ```bash
 npm install
@@ -23,11 +58,17 @@ A aplicação ficará disponível em `http://localhost:4200/`.
 
 ## Testes
 
+Frontend:
+
 ```bash
 npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox
 ```
 
-O projeto inclui um launcher Karma customizado para execução headless estável no Windows.
+Backend:
+
+```bash
+npm run test:backend
+```
 
 ## Build
 
@@ -35,21 +76,22 @@ O projeto inclui um launcher Karma customizado para execução headless estável
 npm run build
 ```
 
-## Funcionalidades implementadas
+## Funcionalidades Implementadas
 
+- Página de login com validação reativa.
 - Tela de consulta de lotes com breadcrumb, painel de filtros recolhível e tabela paginada.
 - Filtros reativos por instituição, situação, faixa de lote, faixa de valor e faixa de data.
-- Serviço separado (`LoteService`) simulando API com `Observable`, `of`, `throwError` e `delay`.
+- Serviço Angular consumindo API FastAPI via `HttpClient`.
+- Backend FastAPI com SQLite, seed inicial e CORS para o Angular.
 - Seleção individual e selecionar todos.
 - Habilitação de ações dependente da seleção: alterar, excluir e visualizar exigem exatamente um lote selecionado.
 - Modal de inclusão de lançamento com formulário reativo.
-- Busca mockada de conta corrente.
+- Busca de conta corrente no backend.
 - Validações obrigatórias e validador customizado para valor monetário maior que zero.
-- Inclusão de lançamento em memória, atualizando a grade do lote.
+- Inclusão de lançamento persistida no SQLite, atualizando valor e quantidade do lote.
 - Formatação pt-BR para números e datas.
+- Debounce na pesquisa.
 
-## Decisões técnicas
+## Decisões Técnicas
 
-Usei CSS próprio em vez de Angular Material ou PrimeNG para manter o layout mais próximo das imagens do desafio, que têm aparência corporativa densa e semelhante a sistemas legados. A aplicação foi separada em componentes de filtro, tabela e modal para manter responsabilidades claras e facilitar explicação durante a entrevista técnica.
-
-Os dados ficam em memória porque o desafio é exclusivamente front-end. O serviço retorna clones dos objetos para reduzir acoplamento entre componentes e simular melhor o contrato de uma API.
+Usei FastAPI com `sqlite3` da biblioteca padrão para manter o backend pequeno, local e fácil de executar. O frontend mantém os componentes originais de filtros, tabela e modal, mas agora consome endpoints HTTP em vez de mocks em memória.

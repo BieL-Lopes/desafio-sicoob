@@ -46,6 +46,10 @@
 
 .page__header {
   height: 58px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   padding: 12px 24px 0;
   border-top: 4px solid var(--pd);
   border-bottom: 1px solid #d4dadb;
@@ -62,6 +66,26 @@ h1 {
 nav {
   color: var(--p);
   font-size: 10px;
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pd);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.session button {
+  height: 24px;
+  border: 1px solid var(--bdx);
+  border-radius: 3px;
+  background: #f9fbfb;
+  color: var(--ctl);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .workspace {

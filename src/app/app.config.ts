@@ -1,5 +1,6 @@
 import { ApplicationConfig, LOCALE_ID } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }]
+  providers: [provideHttpClient(), { provide: LOCALE_ID, useValue: 'pt-BR' }]
 };

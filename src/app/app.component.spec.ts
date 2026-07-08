@@ -1,32 +1,50 @@
 import { registerLocaleData } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import localePt from '@angular/common/locales/pt';
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 registerLocaleData(localePt);
 
 describe('AppComponent', () => {
+  let httpMock: HttpTestingController;
+
   beforeEach(async () => {
+    localStorage.clear();
     await TestBed.configureTestingModule({
-      imports: [AppComponent]
+      imports: [AppComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('creates the consultation screen shell', () => {
+  afterEach(() => {
+    httpMock.verify();
+    localStorage.clear();
+  });
+
+  it('shows the login screen when there is no authenticated session', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
     fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Acesso ao módulo contábil');
+    expect(compiled.textContent).toContain('ENTRAR');
+  });
+
+  it('creates the consultation screen shell for authenticated users', () => {
+    const fixture = createAuthenticatedFixture();
+
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('h1')?.textContent).toContain('Outros Créditos/Débitos');
     expect(compiled.textContent).toContain('Pesquisar');
     expect(compiled.textContent).toContain('INCLUIR');
+    expect(compiled.textContent).toContain('admin');
   });
 
   it('keeps single-record actions disabled until exactly one lot is selected', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-
+    const fixture = createAuthenticatedFixture();
     const component = fixture.componentInstance;
 
     expect(component.hasSingleSelection()).toBeFalse();
@@ -39,8 +57,7 @@ describe('AppComponent', () => {
   });
 
   it('opens the launch modal from the Incluir action', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
+    const fixture = createAuthenticatedFixture();
 
     fixture.componentInstance.openIncluirModal();
     fixture.detectChanges();
@@ -50,9 +67,7 @@ describe('AppComponent', () => {
   });
 
   it('keeps the modal open and refreshes the lot when a launch is included', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-
+    const fixture = createAuthenticatedFixture();
     const component = fixture.componentInstance;
     component.loading = false;
     component.lotes = [
@@ -104,4 +119,14 @@ describe('AppComponent', () => {
     expect(compiled.textContent).toContain('25,00');
     expect(compiled.textContent).toContain('INCLUIR LANÇAMENTO');
   });
+
+  function createAuthenticatedFixture(): ComponentFixture<AppComponent> {
+    localStorage.setItem('auth_token', 'mock-token-admin');
+    localStorage.setItem('auth_user', 'admin');
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    httpMock.expectOne((req) => req.method === 'GET' && req.url.endsWith('/lotes')).flush([]);
+    fixture.detectChanges();
+    return fixture;
+  }
 });

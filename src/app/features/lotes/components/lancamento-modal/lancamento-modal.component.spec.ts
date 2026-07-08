@@ -1,4 +1,6 @@
 import { registerLocaleData } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import localePt from '@angular/common/locales/pt';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Lote } from '../../models/lote.model';
@@ -40,7 +42,8 @@ describe('LancamentoModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LancamentoModalComponent]
+      imports: [LancamentoModalComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LancamentoModalComponent);

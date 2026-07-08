@@ -1,0 +1,29 @@
+<main class="login-page">
+  <form class="login-card" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="login-card__brand">▦</div>
+    <h1>Outros Créditos/Débitos</h1>
+    <p>Acesso ao módulo contábil</p>
+
+    <label>
+      <span>Usuário</span>
+      <input type="text" formControlName="usuario" autocomplete="username" />
+    </label>
+    @if (hasError('usuario')) {
+      <span class="error">Usuário é obrigatório.</span>
+    }
+
+    <label>
+      <span>Senha</span>
+      <input type="password" formControlName="senha" autocomplete="current-password" />
+    </label>
+    @if (hasError('senha')) {
+      <span class="error">Senha é obrigatória.</span>
+    }
+
+    @if (errorMessage) {
+      <p class="feedback">{{ errorMessage }}</p>
+    }
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'ENTRANDO...' : 'ENTRAR' }}</button>
+  </form>
+</main>

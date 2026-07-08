@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
+import { LoginComponent } from './features/auth/components/login/login.component';
+import { AuthService } from './features/auth/services/auth.service';
 import { LancamentoModalComponent } from './features/lotes/components/lancamento-modal/lancamento-modal.component';
 import { LoteFiltersComponent } from './features/lotes/components/lote-filters/lote-filters.component';
 import { LoteResultsTableComponent } from './features/lotes/components/lote-results-table/lote-results-table.component';
@@ -10,7 +12,7 @@ import { LoteService } from './features/lotes/services/lote.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, LoteFiltersComponent, LoteResultsTableComponent, LancamentoModalComponent],
+  imports: [CommonModule, LoginComponent, LoteFiltersComponent, LoteResultsTableComponent, LancamentoModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -25,6 +27,7 @@ export class AppComponent implements OnInit {
   modalOpen = false;
 
   private readonly loteService = inject(LoteService);
+  private readonly authService = inject(AuthService);
   private lastFiltro: FiltroLote = {
     instituicaoResp: '',
     instituicao: '',
@@ -38,7 +41,28 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.pesquisar(this.lastFiltro);
+    }
+  }
+
+  get usuario(): string {
+    return this.authService.usuario;
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+  onLoginSuccess(): void {
     this.pesquisar(this.lastFiltro);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.lotes = [];
+    this.selectedIds.clear();
+    this.modalOpen = false;
   }
 
   get selectedLote(): Lote | null {

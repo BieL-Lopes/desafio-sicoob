@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--bg);
+  color: var(--tx);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-card {
+  width: min(380px, 100%);
+  display: grid;
+  gap: 14px;
+  padding: 28px;
+  border: 1px solid var(--bd);
+  border-radius: var(--r-lg);
+  background: #fff;
+  box-shadow: var(--sh-card);
+}
+
+.login-card__brand {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: var(--ps);
+  color: var(--p);
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  color: var(--p);
+  font-size: 18px;
+}
+
+p {
+  margin: -6px 0 6px;
+  color: var(--mut);
+}
+
+label {
+  display: grid;
+  gap: 5px;
+}
+
+label span {
+  color: var(--pd);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+input {
+  height: 34px;
+  border: 1px solid var(--bds);
+  border-radius: 2px;
+  padding: 0 10px;
+  font: inherit;
+}
+
+button {
+  height: 34px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--p);
+  color: var(--st);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.error,
+.feedback {
+  margin: -8px 0 0;
+  color: var(--err);
+  font-size: 11px;
+}

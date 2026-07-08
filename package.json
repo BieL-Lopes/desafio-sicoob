@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "python": "node backend/scripts/python-runner.cjs",
     "start": "ng serve",
+    "start:backend": "node backend/scripts/python-runner.cjs -m uvicorn app.main:app --reload --app-dir backend",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:backend": "node backend/scripts/python-runner.cjs -m pytest backend/tests"
   },
   "private": true,
   "dependencies": {

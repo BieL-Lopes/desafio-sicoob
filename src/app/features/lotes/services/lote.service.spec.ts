@@ -1,18 +1,26 @@
-import { TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { LoteService } from './lote.service';
 import { Lancamento } from '../models/lancamento.model';
 
 describe('LoteService', () => {
   let service: LoteService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
     service = TestBed.inject(LoteService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('filters lots by situation, id range, amount range and entry date range', fakeAsync(() => {
-    let resultCount = 0;
+  afterEach(() => {
+    httpMock.verify();
+  });
 
+  it('requests lots from the FastAPI backend with informed filters', () => {
     service
       .pesquisarLotes({
         instituicaoResp: '',
@@ -26,16 +34,16 @@ describe('LoteService', () => {
         dataEntradaAte: '2026-04-26'
       })
       .subscribe((lotes) => {
-        resultCount = lotes.length;
         expect(lotes[0].idLote).toBe(2);
       });
 
-    tick(350);
+    const request = httpMock.expectOne((req) => req.method === 'GET' && req.url.endsWith('/lotes'));
+    expect(request.request.params.get('situacao')).toBe('Aberto');
+    expect(request.request.params.get('idLoteDe')).toBe('2');
+    request.flush([{ idLote: 2 }]);
+  });
 
-    expect(resultCount).toBe(1);
-  }));
-
-  it('adds a launch to a lot in memory', fakeAsync(() => {
+  it('posts a launch to the selected lot endpoint', () => {
     const lancamento: Lancamento = {
       idLancamento: 0,
       pa: '01',
@@ -51,16 +59,13 @@ describe('LoteService', () => {
       retornoProc: ''
     };
 
-    let quantidadeLancamentos = 0;
-
     service.incluirLancamento(2, lancamento).subscribe((lote) => {
-      quantidadeLancamentos = lote.lancamentos.length;
-      expect(lote.lancamentos.at(-1)?.idLancamento).toBeGreaterThan(0);
-      expect(lote.quantidadeLancamentos).toBe(lote.lancamentos.length);
+      expect(lote.idLote).toBe(2);
+      expect(lote.quantidadeLancamentos).toBe(2);
     });
 
-    tick(250);
-
-    expect(quantidadeLancamentos).toBeGreaterThan(0);
-  }));
+    const request = httpMock.expectOne((req) => req.method === 'POST' && req.url.endsWith('/lotes/2/lancamentos'));
+    expect(request.request.body.valor).toBe(25);
+    request.flush({ idLote: 2, quantidadeLancamentos: 2 });
+  });
 });
