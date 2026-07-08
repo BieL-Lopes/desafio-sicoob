@@ -8,6 +8,11 @@ body {
   margin: 0;
 }
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
 body {
   background: #eef1f3;
 }

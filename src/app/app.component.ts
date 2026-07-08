@@ -112,6 +112,8 @@ export class AppComponent implements OnInit {
 
   updateLote(loteAtualizado: Lote): void {
     this.lotes = this.lotes.map((lote) => (lote.idLote === loteAtualizado.idLote ? loteAtualizado : lote));
+    this.selectedIds = new Set([loteAtualizado.idLote]);
+    this.closeModal();
   }
 
   changePage(page: number): void {

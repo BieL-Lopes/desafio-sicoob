@@ -134,14 +134,9 @@ textarea {
   font-size: 11px;
 }
 
-.lancamentos {
+.modal-actions {
   display: grid;
-  gap: 12px;
-}
-
-.lancamentos__actions {
-  display: grid;
-  grid-template-columns: auto 1fr repeat(4, auto);
+  grid-template-columns: 1fr repeat(2, auto);
   gap: 6px;
 }
 
@@ -166,32 +161,13 @@ button:disabled {
   opacity: 0.65;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 11px;
-}
-
-th {
-  background: #003b43;
-  color: #fff;
-}
-
-th,
-td {
-  height: 30px;
-  border: 1px solid #dce2e2;
-  padding: 0 8px;
-  text-align: left;
-}
-
 @media (max-width: 680px) {
   fieldset {
     padding-inline: 16px;
   }
 
   .account-row,
-  .lancamentos__actions {
+  .modal-actions {
     grid-template-columns: 1fr;
   }
 

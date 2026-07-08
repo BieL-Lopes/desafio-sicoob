@@ -43,6 +43,37 @@
             <td>{{ lote.situacaoLote }}</td>
             <td>{{ lote.dataHoraSituacaoLote | date: 'dd/MM/yyyy, HH:mm:ss' : undefined : 'pt-BR' }}</td>
           </tr>
+          @if (selectedIds.has(lote.idLote) && lote.lancamentos.length > 0) {
+            <tr class="launch-detail">
+              <td colspan="9">
+                <div class="launch-detail__title">Lançamentos do lote</div>
+                <table class="launch-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>PA</th>
+                      <th>Conta Corrente</th>
+                      <th>Histórico</th>
+                      <th>Valor</th>
+                      <th>Situação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (lancamento of lote.lancamentos; track lancamento.idLancamento) {
+                      <tr>
+                        <td>{{ lancamento.idLancamento }}</td>
+                        <td>{{ lancamento.pa }}</td>
+                        <td>{{ lancamento.contaCorrente }}</td>
+                        <td>{{ lancamento.historico }}</td>
+                        <td class="number">{{ lancamento.valor | number: '1.2-2' : 'pt-BR' }}</td>
+                        <td>{{ lancamento.situacao }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          }
         }
       }
     </tbody>

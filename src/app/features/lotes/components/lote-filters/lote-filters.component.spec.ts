@@ -19,6 +19,7 @@ describe('LoteFiltersComponent', () => {
     expect(compiled.querySelector('.filters')?.classList).toContain('filters--expanded');
     expect(compiled.querySelector<HTMLButtonElement>('.collapse')?.getAttribute('aria-label')).toBe('Recolher filtros');
     expect(compiled.querySelector('.collapse__icon')).not.toBeNull();
+    expect(compiled.querySelector('form')?.querySelector('.search')).not.toBeNull();
 
     compiled.querySelector<HTMLButtonElement>('.collapse')?.click();
     fixture.detectChanges();

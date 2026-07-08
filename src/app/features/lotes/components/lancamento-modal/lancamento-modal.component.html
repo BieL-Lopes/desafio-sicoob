@@ -75,48 +75,10 @@
       </label>
     </fieldset>
 
-    <section class="lancamentos">
-      <div class="lancamentos__actions">
-        <button type="button" (click)="duplicar()">DUPLICAR</button>
-        <span></span>
-        <button type="button">VISUALIZAR</button>
-        <button class="primary" type="button" (click)="incluir()" [disabled]="salvando">INCLUIR</button>
-        <button type="button">ALTERAR</button>
-        <button type="button">EXCLUIR</button>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Id Lançamento</th>
-            <th>PA</th>
-            <th>Conta Corrente</th>
-            <th>Histórico</th>
-            <th>Valor</th>
-            <th>Situação Documento CSC</th>
-            <th>Retorno Proc.</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if (!lote?.lancamentos?.length) {
-            <tr>
-              <td colspan="7">Nenhum lançamento incluído.</td>
-            </tr>
-          } @else {
-            @for (lancamento of lote?.lancamentos; track lancamento.idLancamento) {
-              <tr>
-                <td>{{ lancamento.idLancamento }}</td>
-                <td>{{ lancamento.pa }}</td>
-                <td>{{ lancamento.contaCorrente }}</td>
-                <td>{{ lancamento.historico }}</td>
-                <td>{{ lancamento.valor | number: '1.2-2' : 'pt-BR' }}</td>
-                <td>{{ lancamento.situacaoDocumentoCsc }}</td>
-                <td>{{ lancamento.retornoProc }}</td>
-              </tr>
-            }
-          }
-        </tbody>
-      </table>
-    </section>
+    <div class="modal-actions">
+      <span></span>
+      <button type="button" (click)="closed.emit()">CANCELAR</button>
+      <button class="primary" type="button" (click)="incluir()" [disabled]="salvando">INCLUIR</button>
+    </div>
   </form>
 </section>
