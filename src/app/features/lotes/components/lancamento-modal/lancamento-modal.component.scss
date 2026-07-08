@@ -134,10 +134,34 @@ textarea {
   font-size: 11px;
 }
 
-.modal-actions {
+.lancamentos {
   display: grid;
-  grid-template-columns: 1fr repeat(2, auto);
+  gap: 12px;
+}
+
+.lancamentos__actions {
+  display: grid;
+  grid-template-columns: auto 1fr repeat(4, auto);
   gap: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+th {
+  background: #003b43;
+  color: #fff;
+}
+
+th,
+td {
+  height: 30px;
+  border: 1px solid #dce2e2;
+  padding: 0 8px;
+  text-align: left;
 }
 
 button {
@@ -167,7 +191,7 @@ button:disabled {
   }
 
   .account-row,
-  .modal-actions {
+  .lancamentos__actions {
     grid-template-columns: 1fr;
   }
 

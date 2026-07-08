@@ -1,6 +1,10 @@
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LancamentoModalComponent } from './lancamento-modal.component';
 import { Lote } from '../../models/lote.model';
+import { LancamentoModalComponent } from './lancamento-modal.component';
+
+registerLocaleData(localePt);
 
 describe('LancamentoModalComponent', () => {
   let fixture: ComponentFixture<LancamentoModalComponent>;
@@ -44,16 +48,16 @@ describe('LancamentoModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('renders the inclusion form without an internal launches table', () => {
+  it('renders the inclusion form with the launches grid and documented actions', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.modal table')).toBeNull();
-    expect(compiled.textContent).not.toContain('Id Lançamento');
-    expect(compiled.textContent).not.toContain('DUPLICAR');
-    expect(compiled.textContent).not.toContain('VISUALIZAR');
-    expect(compiled.textContent).not.toContain('ALTERAR');
-    expect(compiled.textContent).not.toContain('EXCLUIR');
-    expect(compiled.textContent).toContain('CANCELAR');
+    expect(compiled.querySelector('.modal table')).not.toBeNull();
+    expect(compiled.textContent).toContain('Id Lançamento');
+    expect(compiled.textContent).toContain('DUPLICAR');
+    expect(compiled.textContent).toContain('VISUALIZAR');
+    expect(compiled.textContent).toContain('ALTERAR');
+    expect(compiled.textContent).toContain('EXCLUIR');
+    expect(compiled.textContent).not.toContain('CANCELAR');
     expect(compiled.textContent).toContain('INCLUIR');
   });
 });

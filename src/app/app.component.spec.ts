@@ -49,7 +49,7 @@ describe('AppComponent', () => {
     expect(compiled.textContent).toContain('INCLUIR LANÇAMENTO');
   });
 
-  it('closes the modal and refreshes the table when a launch is included', () => {
+  it('keeps the modal open and refreshes the lot when a launch is included', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
 
@@ -96,12 +96,12 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(component.modalOpen).toBeFalse();
+    expect(component.modalOpen).toBeTrue();
     expect(component.selectedIds.has(2)).toBeTrue();
     expect(component.pagedLotes[0].valor).toBe(1025);
     expect(compiled.textContent).toContain('1.025,00');
     expect(compiled.textContent).toContain('Lançamento Manual');
     expect(compiled.textContent).toContain('25,00');
-    expect(compiled.textContent).not.toContain('INCLUIR LANÇAMENTO');
+    expect(compiled.textContent).toContain('INCLUIR LANÇAMENTO');
   });
 });
