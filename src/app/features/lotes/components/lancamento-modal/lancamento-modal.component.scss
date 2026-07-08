@@ -1,0 +1,202 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: start center;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.modal {
+  position: relative;
+  width: min(620px, calc(100vw - 24px));
+  max-height: calc(100vh - 56px);
+  margin-top: 44px;
+  overflow-y: auto;
+  border: 1px solid #ccd4d5;
+  background: #fff;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 4px;
+}
+
+h2 {
+  margin: 0;
+  color: #001f24;
+  font-size: 12px;
+}
+
+header button {
+  border: 0;
+  background: transparent;
+  color: #657477;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal__body {
+  display: grid;
+  gap: 22px;
+  padding: 0 22px 22px;
+}
+
+fieldset {
+  display: grid;
+  gap: 13px;
+  border: 1px solid #dce2e2;
+  border-radius: 2px;
+  padding: 18px 42px 22px;
+}
+
+legend {
+  padding: 0 8px;
+  color: #263d42;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+label {
+  display: grid;
+  gap: 5px;
+}
+
+label span,
+.holder {
+  color: #263d42;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 30px;
+  border: 1px solid #d2dada;
+  border-radius: 2px;
+  padding: 0 9px;
+  color: #1e3337;
+  font: inherit;
+}
+
+textarea {
+  padding-top: 8px;
+  resize: vertical;
+}
+
+.account-row {
+  display: grid;
+  grid-template-columns: 170px 28px 1fr;
+  gap: 8px;
+  align-items: end;
+}
+
+.icon {
+  height: 30px;
+  border: 0;
+  background: transparent;
+  color: #003b43;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.short {
+  width: 118px;
+}
+
+.medium {
+  width: 230px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox input {
+  width: 16px;
+  min-height: 16px;
+}
+
+.error {
+  margin: -6px 0 0;
+  color: #a14042;
+  font-size: 11px;
+}
+
+.lancamentos {
+  display: grid;
+  gap: 12px;
+}
+
+.lancamentos__actions {
+  display: grid;
+  grid-template-columns: auto 1fr repeat(4, auto);
+  gap: 6px;
+}
+
+button {
+  min-height: 28px;
+  border: 1px solid #9ea9ab;
+  border-radius: 2px;
+  background: #f5f7f7;
+  color: #22373b;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.primary {
+  border-color: #007f73;
+  background: #008a7b;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+th {
+  background: #003b43;
+  color: #fff;
+}
+
+th,
+td {
+  height: 30px;
+  border: 1px solid #dce2e2;
+  padding: 0 8px;
+  text-align: left;
+}
+
+@media (max-width: 680px) {
+  fieldset {
+    padding-inline: 16px;
+  }
+
+  .account-row,
+  .lancamentos__actions {
+    grid-template-columns: 1fr;
+  }
+
+  .short,
+  .medium {
+    width: 100%;
+  }
+}

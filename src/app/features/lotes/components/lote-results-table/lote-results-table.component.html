@@ -1,0 +1,58 @@
+<div class="table-shell" [class.loading]="loading">
+  <table>
+    <thead>
+      <tr>
+        <th class="select-col">
+          <input type="checkbox" [checked]="allSelected" (change)="selectAllChange.emit($any($event.target).checked)" />
+        </th>
+        <th>ID Lote</th>
+        <th>Data Entrada</th>
+        <th>Valor</th>
+        <th>Quant. Lançamentos</th>
+        <th>Usuário Registro</th>
+        <th>Usuário Aprovação</th>
+        <th>Situação Lote</th>
+        <th>Data/Hora Situação Lote</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (loading) {
+        <tr>
+          <td colspan="9" class="empty">Consultando lotes...</td>
+        </tr>
+      } @else if (lotes.length === 0) {
+        <tr>
+          <td colspan="9" class="empty">Nenhum lote encontrado.</td>
+        </tr>
+      } @else {
+        @for (lote of lotes; track lote.idLote) {
+          <tr [class.selected]="selectedIds.has(lote.idLote)">
+            <td>
+              <input
+                type="checkbox"
+                [checked]="selectedIds.has(lote.idLote)"
+                (change)="selectionChange.emit({ idLote: lote.idLote, selected: $any($event.target).checked })"
+              />
+            </td>
+            <td>{{ lote.idLote }}</td>
+            <td>{{ lote.dataEntrada | date: 'dd/MM/yyyy' : undefined : 'pt-BR' }}</td>
+            <td class="number">{{ lote.valor | number: '1.2-2' : 'pt-BR' }}</td>
+            <td class="number warn">{{ lote.quantidadeLancamentos }}</td>
+            <td>{{ lote.usuarioRegistro }}</td>
+            <td>{{ lote.usuarioAprovacao }}</td>
+            <td>{{ lote.situacaoLote }}</td>
+            <td>{{ lote.dataHoraSituacaoLote | date: 'dd/MM/yyyy, HH:mm:ss' : undefined : 'pt-BR' }}</td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+
+<nav class="pagination" aria-label="Paginação">
+  <button type="button" (click)="goToPage(1)" [disabled]="currentPage === 1">«</button>
+  <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹</button>
+  <span>{{ currentPage }}</span>
+  <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">›</button>
+  <button type="button" (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">»</button>
+</nav>

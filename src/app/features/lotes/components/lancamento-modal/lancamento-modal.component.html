@@ -1,0 +1,122 @@
+<div class="backdrop" (click)="closed.emit()"></div>
+
+<section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <header>
+    <h2 id="modal-title">INCLUIR LANÇAMENTO</h2>
+    <button type="button" aria-label="Fechar" (click)="closed.emit()">×</button>
+  </header>
+
+  <form [formGroup]="form" class="modal__body">
+    <fieldset>
+      <legend>Conta Corrente</legend>
+
+      <div class="account-row">
+        <label>
+          <span>Conta Corrente *</span>
+          <input type="text" formControlName="contaCorrente" />
+        </label>
+        <button class="icon" type="button" aria-label="Buscar conta corrente" (click)="buscarConta()">⌕</button>
+        <span class="holder">{{ titular || 'Iris Maria Costa' }}</span>
+      </div>
+      @if (contaErro) {
+        <p class="error">{{ contaErro }}</p>
+      }
+
+      <label class="short">
+        <span>Valor *</span>
+        <input type="text" formControlName="valor" />
+      </label>
+      @if (hasError('valor')) {
+        <p class="error">Informe um valor monetário maior que zero.</p>
+      }
+
+      <label>
+        <span>Histórico *</span>
+        <select formControlName="historico">
+          <option>Lançamento Manual</option>
+          <option>Ajuste Contábil</option>
+          <option>Crédito Operacional</option>
+        </select>
+      </label>
+
+      <label class="checkbox">
+        <input type="checkbox" formControlName="estorno" />
+        <span>Estorno</span>
+      </label>
+
+      <label class="short">
+        <span>Documento *</span>
+        <input type="text" formControlName="documento" />
+      </label>
+      @if (hasError('documento')) {
+        <p class="error">Documento é obrigatório.</p>
+      }
+
+      <label>
+        <span>Descrição</span>
+        <textarea rows="3" formControlName="descricao"></textarea>
+      </label>
+
+      <label class="medium">
+        <span>Situação</span>
+        <input type="text" formControlName="situacao" />
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Documento CSC</legend>
+      <label>
+        <span>PA *</span>
+        <select formControlName="pa">
+          <option value="01">01 - Unidade Sede</option>
+          <option value="02">02 - Atendimento</option>
+          <option value="03">03 - Retaguarda</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <section class="lancamentos">
+      <div class="lancamentos__actions">
+        <button type="button" (click)="duplicar()">DUPLICAR</button>
+        <span></span>
+        <button type="button">VISUALIZAR</button>
+        <button class="primary" type="button" (click)="incluir()" [disabled]="salvando">INCLUIR</button>
+        <button type="button">ALTERAR</button>
+        <button type="button">EXCLUIR</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Id Lançamento</th>
+            <th>PA</th>
+            <th>Conta Corrente</th>
+            <th>Histórico</th>
+            <th>Valor</th>
+            <th>Situação Documento CSC</th>
+            <th>Retorno Proc.</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (!lote?.lancamentos?.length) {
+            <tr>
+              <td colspan="7">Nenhum lançamento incluído.</td>
+            </tr>
+          } @else {
+            @for (lancamento of lote?.lancamentos; track lancamento.idLancamento) {
+              <tr>
+                <td>{{ lancamento.idLancamento }}</td>
+                <td>{{ lancamento.pa }}</td>
+                <td>{{ lancamento.contaCorrente }}</td>
+                <td>{{ lancamento.historico }}</td>
+                <td>{{ lancamento.valor | number: '1.2-2' : 'pt-BR' }}</td>
+                <td>{{ lancamento.situacaoDocumentoCsc }}</td>
+                <td>{{ lancamento.retornoProc }}</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </section>
+  </form>
+</section>

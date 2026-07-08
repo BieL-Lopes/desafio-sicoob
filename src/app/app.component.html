@@ -1,0 +1,48 @@
+<aside class="sidebar">
+  <div class="brand-icon">▦</div>
+  <span>Contábil</span>
+</aside>
+
+<main class="page">
+  <header class="page__header">
+    <h1>Outros Créditos/Débitos</h1>
+    <nav aria-label="breadcrumb">Início › Outros Créditos/Débitos</nav>
+  </header>
+
+  <section class="workspace">
+    <app-lote-filters (pesquisar)="pesquisar($event)" />
+
+    <div class="actions" aria-label="Ações do lote">
+      <button type="button" [disabled]="!hasSelection()">CONFIRMAR</button>
+      <button type="button" [disabled]="!hasSelection()">ENVIAR</button>
+      <button type="button" [disabled]="!hasSelection()">VISUALIZAR JUSTIFICATIVA</button>
+      <button type="button" class="primary" (click)="openIncluirModal()">INCLUIR</button>
+      <button type="button" [disabled]="!hasSingleSelection()">ALTERAR</button>
+      <button type="button" [disabled]="!hasSingleSelection()">EXCLUIR</button>
+      <button type="button" [disabled]="!hasSingleSelection()">VISUALIZAR</button>
+    </div>
+
+    @if (errorMessage) {
+      <p class="feedback">{{ errorMessage }}</p>
+    }
+
+    <app-lote-results-table
+      [lotes]="pagedLotes"
+      [selectedIds]="selectedIds"
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [loading]="loading"
+      (selectionChange)="toggleSelection($event.idLote, $event.selected)"
+      (selectAllChange)="toggleAll($event)"
+      (pageChange)="changePage($event)"
+    />
+  </section>
+
+  @if (modalOpen) {
+    <app-lancamento-modal
+      [lote]="selectedLote"
+      (closed)="closeModal()"
+      (loteAtualizado)="updateLote($event)"
+    />
+  }
+</main>

@@ -1,0 +1,76 @@
+<section class="filters" [class.filters--expanded]="expanded">
+  <button
+    class="collapse"
+    type="button"
+    (click)="toggleExpanded()"
+    [attr.aria-expanded]="expanded"
+    [attr.aria-label]="expanded ? 'Recolher filtros' : 'Expandir filtros'"
+  >
+    <span class="collapse__icon" [class.collapse__icon--expanded]="expanded" aria-hidden="true"></span>
+  </button>
+  <div class="filters__header">
+    <strong>Filtros</strong>
+    <span>PESQUISAR LOTE OUTROS CRÉDITOS/DÉBITOS</span>
+  </div>
+
+  <form
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+    class="filters__form"
+    [class.filters__form--collapsed]="!expanded"
+    [attr.aria-hidden]="!expanded"
+  >
+    <div class="filters__left">
+      <label>
+        <span>Instituição Resp.</span>
+        <input type="text" formControlName="instituicaoResp" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+      <label>
+        <span>Instituição</span>
+        <input type="text" formControlName="instituicao" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+      <label>
+        <span>Situação Lote</span>
+        <select formControlName="situacao" [tabIndex]="expanded ? 0 : -1">
+          @for (situacao of situacoes; track situacao) {
+            <option [ngValue]="situacao">{{ situacao === 'Todas' ? 'TODAS' : situacao }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="filters__right">
+      <span class="range-label">ID Lote</span>
+      <label>
+        <span>De</span>
+        <input type="number" formControlName="idLoteDe" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+      <label>
+        <span>Até</span>
+        <input type="number" formControlName="idLoteAte" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+
+      <span class="range-label">Valor Lote</span>
+      <label>
+        <span>De</span>
+        <input type="number" min="0" step="0.01" formControlName="valorDe" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+      <label>
+        <span>Até</span>
+        <input type="number" min="0" step="0.01" formControlName="valorAte" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+
+      <span class="range-label">Data Entrada</span>
+      <label class="wide">
+        <span>De</span>
+        <input type="date" formControlName="dataEntradaDe" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+      <label class="wide">
+        <span>Até</span>
+        <input type="date" formControlName="dataEntradaAte" [tabIndex]="expanded ? 0 : -1" />
+      </label>
+    </div>
+
+    <button class="primary search" type="submit" [tabIndex]="expanded ? 0 : -1">Pesquisar</button>
+  </form>
+</section>
