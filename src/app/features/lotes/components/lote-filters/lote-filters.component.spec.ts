@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { LoteFiltersComponent } from './lote-filters.component';
 
 describe('LoteFiltersComponent', () => {
@@ -30,4 +30,20 @@ describe('LoteFiltersComponent', () => {
     expect(compiled.querySelector('form')?.getAttribute('aria-hidden')).toBe('true');
     expect(compiled.querySelector<HTMLButtonElement>('.collapse')?.getAttribute('aria-label')).toBe('Expandir filtros');
   });
+
+  it('debounces search submissions before emitting filters', fakeAsync(() => {
+    const emitted: unknown[] = [];
+
+    fixture.componentInstance.pesquisar.subscribe((filtro) => emitted.push(filtro));
+    fixture.componentInstance.submit();
+
+    expect(emitted).toHaveSize(0);
+
+    tick(299);
+    expect(emitted).toHaveSize(0);
+
+    tick(1);
+    expect(emitted).toHaveSize(1);
+    expect(emitted[0]).toEqual(jasmine.objectContaining({ situacao: 'Todas' }));
+  }));
 });

@@ -1,3 +1,30 @@
+:root {
+  --bg: #eef1f3;
+  --sf: #fff;
+  --sfm: #f7faf9;
+  --p: #008a7b;
+  --ph: #09a58f;
+  --pd: #003b43;
+  --ps: #e0f3ef;
+  --tx: #1f3438;
+  --ctl: #1e3337;
+  --st: #001f24;
+  --mut: #647276;
+  --bd: #dce2e2;
+  --bds: #d1d8d8;
+  --bdx: #9aa6a8;
+  --act: #e8ecef;
+  --err: #a14042;
+  --row: #effdfa;
+  --rows: #dff8f4;
+  --r-sm: 2px;
+  --r-md: 3px;
+  --r-lg: 8px;
+  --sh-card: 0 2px 7px rgba(0, 0, 0, 0.22);
+  --sh-subtle: 0 1px 3px rgba(0, 0, 0, 0.16);
+  --t-fast: 180ms ease;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -14,7 +41,7 @@ html {
 }
 
 body {
-  background: #eef1f3;
+  background: var(--bg);
 }
 
 button,

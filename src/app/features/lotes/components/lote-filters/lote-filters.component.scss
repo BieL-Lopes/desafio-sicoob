@@ -1,4 +1,4 @@
-:host {
+﻿:host {
   display: block;
 }
 
@@ -9,7 +9,7 @@
   border: 1px solid #d9dddd;
   border-radius: 3px;
   background: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--sh-subtle);
   overflow: hidden;
   transition: min-height 180ms ease, padding-bottom 180ms ease;
 }
@@ -34,14 +34,14 @@
 }
 
 .collapse:hover {
-  border-color: #008a7b;
+  border-color: var(--p);
 }
 
 .collapse__icon {
   width: 9px;
   height: 9px;
-  border-right: 2px solid #003b43;
-  border-bottom: 2px solid #003b43;
+  border-right: 2px solid var(--pd);
+  border-bottom: 2px solid var(--pd);
   transform: translateY(-2px) rotate(45deg);
   transition: transform 180ms ease;
 }
@@ -61,7 +61,7 @@
 .filters__header span {
   font-size: 11px;
   font-weight: 700;
-  color: #003b43;
+  color: var(--pd);
 }
 
 .filters__form {
@@ -105,7 +105,7 @@ label span,
 .range-label {
   font-size: 10px;
   font-weight: 700;
-  color: #103c43;
+  color: var(--pd);
 }
 
 .range-label {
@@ -127,7 +127,7 @@ select {
 .primary {
   border: 0;
   border-radius: 4px;
-  background: #008a7b;
+  background: var(--p);
   color: #001f24;
   font-weight: 700;
   cursor: pointer;
@@ -158,3 +158,5 @@ select {
     justify-self: end;
   }
 }
+
+

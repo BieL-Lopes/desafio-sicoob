@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Subject, Subscription, debounceTime } from 'rxjs';
 import { FiltroLote } from '../../models/filtro-lote.model';
 import { SituacaoLote } from '../../models/lote.model';
 
@@ -10,13 +11,17 @@ import { SituacaoLote } from '../../models/lote.model';
   templateUrl: './lote-filters.component.html',
   styleUrl: './lote-filters.component.scss'
 })
-export class LoteFiltersComponent {
+export class LoteFiltersComponent implements OnDestroy {
   @Output() pesquisar = new EventEmitter<FiltroLote>();
 
   readonly situacoes: Array<SituacaoLote | 'Todas'> = ['Todas', 'Aberto', 'Enviado', 'Confirmado'];
   protected expanded = true;
 
   private readonly fb = inject(FormBuilder);
+  private readonly searchRequests = new Subject<FiltroLote>();
+  private readonly searchSubscription: Subscription = this.searchRequests
+    .pipe(debounceTime(300))
+    .subscribe((filtro) => this.pesquisar.emit(filtro));
 
   readonly form = this.fb.group({
     instituicaoResp: ['0001 - SICOOB'],
@@ -34,10 +39,18 @@ export class LoteFiltersComponent {
     this.expanded = !this.expanded;
   }
 
+  ngOnDestroy(): void {
+    this.searchSubscription.unsubscribe();
+  }
+
   submit(): void {
+    this.searchRequests.next(this.getFiltro());
+  }
+
+  private getFiltro(): FiltroLote {
     const raw = this.form.getRawValue();
 
-    this.pesquisar.emit({
+    return {
       instituicaoResp: raw.instituicaoResp ?? '',
       instituicao: raw.instituicao ?? '',
       situacao: raw.situacao ?? 'Todas',
@@ -47,6 +60,6 @@ export class LoteFiltersComponent {
       valorAte: raw.valorAte,
       dataEntradaDe: raw.dataEntradaDe ?? '',
       dataEntradaAte: raw.dataEntradaAte ?? ''
-    });
+    };
   }
 }

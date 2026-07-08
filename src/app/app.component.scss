@@ -1,8 +1,8 @@
-:host {
+﻿:host {
   display: block;
   min-height: 100vh;
-  background: #eef1f3;
-  color: #1f3438;
+  background: var(--bg);
+  color: var(--tx);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
 }
@@ -18,8 +18,8 @@
   gap: 4px;
   padding-top: 14px;
   border-right: 1px solid #cdd5d7;
-  background: #f7faf9;
-  color: #008a7b;
+  background: var(--sfm);
+  color: var(--p);
   box-shadow: 2px 0 8px rgba(23, 42, 48, 0.08);
 }
 
@@ -28,14 +28,14 @@
   place-items: center;
   width: 22px;
   height: 22px;
-  background: #e0f3ef;
-  color: #008a7b;
+  background: var(--ps);
+  color: var(--p);
   font-weight: 700;
 }
 
 .sidebar span {
   padding-bottom: 12px;
-  border-bottom: 2px solid #09a58f;
+  border-bottom: 2px solid var(--ph);
   font-size: 10px;
 }
 
@@ -47,20 +47,20 @@
 .page__header {
   height: 58px;
   padding: 12px 24px 0;
-  border-top: 4px solid #003b43;
+  border-top: 4px solid var(--pd);
   border-bottom: 1px solid #d4dadb;
-  background: #fff;
+  background: var(--sf);
 }
 
 h1 {
   margin: 0 0 5px;
-  color: #008a7b;
+  color: var(--p);
   font-size: 14px;
   line-height: 1.2;
 }
 
 nav {
-  color: #008a7b;
+  color: var(--p);
   font-size: 10px;
 }
 
@@ -68,9 +68,9 @@ nav {
   margin: 16px;
   padding: 56px 26px 46px;
   border: 1px solid #cfd7d8;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.22);
+  border-radius: var(--r-lg);
+  background: var(--sf);
+  box-shadow: var(--sh-card);
 }
 
 .actions {
@@ -79,25 +79,25 @@ nav {
   gap: 4px;
   margin: 14px 0 12px;
   padding: 3px;
-  background: #e8ecef;
+  background: var(--act);
 }
 
 .actions button {
   min-width: 84px;
   height: 28px;
-  border: 1px solid #9aa6a8;
-  border-radius: 3px;
+  border: 1px solid var(--bdx);
+  border-radius: var(--r-md);
   background: #f9fbfb;
-  color: #1e3337;
+  color: var(--ctl);
   font-size: 10px;
   font-weight: 700;
   cursor: pointer;
 }
 
 .actions button.primary {
-  border-color: #008a7b;
-  background: #008a7b;
-  color: #001f24;
+  border-color: var(--p);
+  background: var(--p);
+  color: var(--st);
 }
 
 .actions button:disabled {
@@ -107,7 +107,7 @@ nav {
 
 .feedback {
   margin: 0 0 10px;
-  color: #a14042;
+  color: var(--err);
 }
 
 @media (max-width: 760px) {
@@ -130,3 +130,5 @@ nav {
     padding: 16px 12px 24px;
   }
 }
+
+

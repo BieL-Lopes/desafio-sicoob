@@ -1,11 +1,11 @@
-:host {
+﻿:host {
   display: block;
 }
 
 .table-shell {
   min-height: 116px;
-  border: 1px solid #dce2e2;
-  background: #fff;
+  border: 1px solid var(--bd);
+  background: var(--sf);
   overflow-x: auto;
 }
 
@@ -17,8 +17,8 @@ table {
 
 th {
   height: 38px;
-  background: #003b43;
-  color: #fff;
+  background: var(--pd);
+  color: var(--sf);
   font-size: 11px;
   font-weight: 700;
   text-align: left;
@@ -28,7 +28,7 @@ th {
 td {
   height: 36px;
   border-bottom: 1px solid #d9eeee;
-  color: #1f3438;
+  color: var(--tx);
 }
 
 th,
@@ -37,11 +37,11 @@ td {
 }
 
 tbody tr {
-  background: #effdfa;
+  background: var(--row);
 }
 
 tbody tr.selected {
-  background: #dff8f4;
+  background: var(--rows);
 }
 
 .select-col {
@@ -53,13 +53,13 @@ tbody tr.selected {
 }
 
 .warn {
-  color: #a14042;
+  color: var(--err);
 }
 
 .empty {
   text-align: center;
-  color: #647276;
-  background: #fff;
+  color: var(--mut);
+  background: var(--sf);
 }
 
 .pagination {
@@ -84,10 +84,12 @@ tbody tr.selected {
 }
 
 .pagination span {
-  background: #008a7b;
-  color: #fff;
+  background: var(--p);
+  color: var(--sf);
 }
 
 .pagination button:not(:disabled) {
   cursor: pointer;
 }
+
+
