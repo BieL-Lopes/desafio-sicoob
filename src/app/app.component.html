@@ -75,7 +75,7 @@
 
     @if (visualizarModalOpen) {
       @if (selectedLote; as lote) {
-        <div class="view-backdrop" (click)="closeVisualizarModal()"></div>
+        <button class="view-backdrop" type="button" aria-label="Fechar visualização" (click)="closeVisualizarModal()"></button>
         <section class="view-modal" role="dialog" aria-modal="true" aria-labelledby="view-title">
           <header class="view-modal__header">
             <h2 id="view-title">VISUALIZAR LOTE</h2>
@@ -171,7 +171,7 @@
     }
 
     @if (successMessage) {
-      <div class="success-backdrop" (click)="closeSuccessModal()"></div>
+      <button class="success-backdrop" type="button" aria-label="Fechar mensagem" (click)="closeSuccessModal()"></button>
       <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="success-title">
         <div class="success-modal__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">

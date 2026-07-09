@@ -14,7 +14,7 @@ import { SituacaoLote } from '../../models/lote.model';
 export class LoteFiltersComponent implements OnDestroy {
   @Output() pesquisar = new EventEmitter<FiltroLote>();
 
-  readonly situacoes: Array<SituacaoLote | 'Todas'> = ['Todas', 'Aberto', 'Enviado', 'Confirmado'];
+  readonly situacoes: (SituacaoLote | 'Todas')[] = ['Todas', 'Aberto', 'Enviado', 'Confirmado'];
   protected expanded = true;
 
   private readonly fb = inject(FormBuilder);

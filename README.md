@@ -146,6 +146,14 @@ Execute a suíte do backend:
 npm run test:backend
 ```
 
+## Lint
+
+Execute a validação estática do frontend:
+
+```bash
+npm run lint
+```
+
 ## Build
 
 Gere o build de produção:
