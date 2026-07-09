@@ -1,41 +1,83 @@
 # Outros Créditos/Débitos
 
-Aplicação Angular para o desafio prático de modernização de telas Flex para Angular no módulo contábil de Outros Créditos/Débitos, agora com backend simples em FastAPI e SQLite.
+Aplicação desenvolvida para o desafio prático de modernização da tela de Outros Créditos/Débitos do módulo contábil. O projeto usa Angular no frontend e uma API simples em FastAPI com SQLite para simular a persistência dos dados.
 
 ## Stack
 
-- Angular 17.3
+- Angular 17.3 com standalone components
 - TypeScript
-- Standalone Components
 - Reactive Forms
+- RxJS
+- SCSS com variáveis globais de design
 - FastAPI
 - SQLite
 - Jasmine/Karma para testes do frontend
 - Pytest para testes do backend
-- CSS/SCSS próprio com tokens globais de design
 
 ## Credenciais
 
-- Usuário: `admin`
-- Senha: `admin`
+Use as credenciais abaixo para acessar a aplicação:
 
-## Backend
+```text
+Usuário: admin
+Senha: admin
+```
 
-Instale as dependências Python:
+## Requisitos
+
+- Node.js e npm
+- Python disponível pelo runtime configurado no projeto
+- Google Chrome ou Chromium para os testes em `ChromeHeadlessNoSandbox`
+
+## Instalação
+
+Instale as dependências do frontend:
+
+```bash
+npm install
+```
+
+Instale as dependências do backend:
 
 ```bash
 npm run python -- -m pip install -r backend/requirements.txt
 ```
 
-Execute a API:
+## Executando o Backend
+
+Inicie a API FastAPI:
 
 ```bash
 npm run start:backend
 ```
 
-A API ficará disponível em `http://127.0.0.1:8000`.
+A API ficará disponível em:
 
-Endpoints principais:
+```text
+http://127.0.0.1:8000
+```
+
+O banco SQLite é criado automaticamente em:
+
+```text
+backend/data/outros_creditos.db
+```
+
+## Executando o Frontend
+
+Em outro terminal, inicie o Angular:
+
+```bash
+npm start
+```
+
+A aplicação ficará disponível em:
+
+```text
+http://localhost:4200/
+```
+
+## Endpoints
 
 - `GET /health`
 - `POST /auth/login`
@@ -43,28 +85,62 @@ Endpoints principais:
 - `GET /contas-correntes/{numero}`
 - `POST /lotes/{id_lote}/lancamentos`
 
-O SQLite é criado automaticamente em `backend/data/outros_creditos.db` com dados iniciais equivalentes aos mocks originais.
+## Funcionalidades
 
-## Frontend
+- Login com formulário reativo e armazenamento de sessão em `localStorage`.
+- Tela principal com título, breadcrumb e menu lateral responsivo.
+- Botão de logout com ícone.
+- Painel de filtros recolhível com animação.
+- Filtros por instituição responsável, instituição, situação do lote, faixa de ID, faixa de valor e faixa de data.
+- Pesquisa com `debounceTime`.
+- Tabela de lotes com seleção individual e selecionar todos.
+- Paginação com primeira, anterior, página atual, próxima e última.
+- Ações de lote: Confirmar, Enviar, Visualizar Justificativa, Incluir, Alterar, Excluir e Visualizar.
+- Habilitação de Alterar, Excluir e Visualizar apenas quando exatamente um lote está selecionado.
+- Modal de sucesso para Enviar e Confirmar.
+- Modal de visualização do lote com dados do lote e lançamentos.
+- Modal de inclusão de lançamento com Reactive Forms.
+- Busca de conta corrente no backend e exibição do titular ao lado da lupa.
+- Validação de campos obrigatórios no modal.
+- Validador customizado para valor monetário maior que zero.
+- Máscara monetária pt-BR no campo Valor do lançamento, por exemplo `1.500,02`.
+- Inclusão de lançamento persistida no SQLite.
+- Atualização do valor e da quantidade de lançamentos do lote após inclusão.
+- Formatação de datas e valores em pt-BR.
+- Responsividade básica para telas menores.
 
-Em outro terminal:
+## Estrutura
 
-```bash
-npm install
-npm start
+```text
+backend/
+  app/
+    database.py
+    main.py
+  data/
+    outros_creditos.db
+  scripts/
+    python-runner.cjs
+  tests/
+    test_api.py
+
+src/app/
+  features/
+    auth/
+    lotes/
+  shared/
+    validators/
+  app.component.*
 ```
-
-A aplicação ficará disponível em `http://localhost:4200/`.
 
 ## Testes
 
-Frontend:
+Execute a suíte do frontend:
 
 ```bash
-npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox
+npx ng test --watch=false --browsers=ChromeHeadlessNoSandbox --progress=false --source-map=false
 ```
 
-Backend:
+Execute a suíte do backend:
 
 ```bash
 npm run test:backend
@@ -72,26 +148,22 @@ npm run test:backend
 
 ## Build
 
+Gere o build de produção:
+
 ```bash
 npm run build
 ```
 
-## Funcionalidades Implementadas
+O resultado será gerado em:
 
-- Página de login com validação reativa.
-- Tela de consulta de lotes com breadcrumb, painel de filtros recolhível e tabela paginada.
-- Filtros reativos por instituição, situação, faixa de lote, faixa de valor e faixa de data.
-- Serviço Angular consumindo API FastAPI via `HttpClient`.
-- Backend FastAPI com SQLite, seed inicial e CORS para o Angular.
-- Seleção individual e selecionar todos.
-- Habilitação de ações dependente da seleção: alterar, excluir e visualizar exigem exatamente um lote selecionado.
-- Modal de inclusão de lançamento com formulário reativo.
-- Busca de conta corrente no backend.
-- Validações obrigatórias e validador customizado para valor monetário maior que zero.
-- Inclusão de lançamento persistida no SQLite, atualizando valor e quantidade do lote.
-- Formatação pt-BR para números e datas.
-- Debounce na pesquisa.
+```text
+dist/outros-creditos-debitos
+```
 
 ## Decisões Técnicas
 
-Usei FastAPI com `sqlite3` da biblioteca padrão para manter o backend pequeno, local e fácil de executar. O frontend mantém os componentes originais de filtros, tabela e modal, mas agora consome endpoints HTTP em vez de mocks em memória.
+- O frontend foi componentizado em login, filtros, tabela de resultados e modal de lançamento.
+- A comunicação com a API fica isolada nos services Angular.
+- O backend usa FastAPI e `sqlite3` da biblioteca padrão para manter o desafio simples, local e fácil de executar.
+- Os dados iniciais são carregados no SQLite durante a inicialização do backend.
+- A paleta visual segue tons de verde-petróleo, com tokens globais em `src/styles.scss`.
