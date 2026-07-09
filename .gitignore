@@ -45,3 +45,6 @@ Thumbs.db
 backend/data/*.db
 backend/**/__pycache__/
 backend/.venv/
+
+# Docker
+docker-compose.override.yml

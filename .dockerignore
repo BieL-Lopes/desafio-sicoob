@@ -1,0 +1,13 @@
+node_modules
+dist
+.angular
+.git
+.vscode
+.pytest_cache
+.editorconfig
+*.log
+*.err.log
+backend/.venv
+backend/**/__pycache__
+backend/.pytest_cache
+backend/data/*.db

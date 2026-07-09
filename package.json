@@ -10,7 +10,11 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:backend": "node backend/scripts/python-runner.cjs -m pytest backend/tests",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:build": "docker compose up -d --build",
+    "docker:logs": "docker compose logs -f"
   },
   "private": true,
   "dependencies": {

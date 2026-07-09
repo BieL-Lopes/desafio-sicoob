@@ -28,6 +28,7 @@ Senha: admin
 - Node.js e npm
 - Python disponível pelo runtime configurado no projeto
 - Google Chrome ou Chromium para os testes em `ChromeHeadlessNoSandbox`
+- Docker e Docker Compose para execução containerizada
 
 ## Instalação
 
@@ -76,6 +77,39 @@ A aplicação ficará disponível em:
 ```text
 http://localhost:4200/
 ```
+
+## Executando com Docker
+
+O projeto também pode ser executado com Docker Compose. O compose sobe dois serviços:
+
+- `backend`: API FastAPI em `http://127.0.0.1:8000`
+- `frontend`: aplicação Angular servida por Nginx em `http://localhost:4200`
+
+Suba os containers:
+
+```bash
+npm run docker:up
+```
+
+Suba reconstruindo as imagens:
+
+```bash
+npm run docker:build
+```
+
+Acompanhe os logs:
+
+```bash
+npm run docker:logs
+```
+
+Pare os containers:
+
+```bash
+npm run docker:down
+```
+
+O SQLite do backend é persistido no volume Docker `backend-data`.
 
 ## Endpoints
 
