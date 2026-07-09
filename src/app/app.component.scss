@@ -1,4 +1,4 @@
-﻿:host {
+:host {
   display: block;
   min-height: 100vh;
   background: var(--bg);
@@ -55,7 +55,6 @@
   justify-content: space-between;
   gap: 16px;
   padding: 12px 24px 0;
-  border-top: 4px solid var(--pd);
   border-bottom: 1px solid #d4dadb;
   background: var(--sf);
 }
@@ -352,8 +351,8 @@ nav {
     flex: 0 0 auto;
     display: grid;
     place-items: center;
-    width: 66px;
-    height: 66px;
+    width: 30px;
+    height: 30px;
     border: 1px solid var(--bdx);
     border-radius: 5px;
     background: #fff;

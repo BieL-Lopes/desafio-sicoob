@@ -78,6 +78,27 @@ A aplicação ficará disponível em:
 http://localhost:4200/
 ```
 
+## Configuração Mock ou Backend
+
+A origem dos dados do frontend é definida em:
+
+```text
+src/environments/environment.ts
+```
+
+Use `useMock: true` para executar sem depender do FastAPI. Nesse modo, login, pesquisa, busca de conta corrente e inclusão de lançamentos usam dados locais em memória.
+
+Use `useMock: false` para consumir o backend FastAPI/SQLite configurado em `apiBaseUrl`.
+
+Exemplo:
+
+```ts
+export const environment = {
+  apiBaseUrl: 'http://127.0.0.1:8000',
+  useMock: false
+};
+```
+
 ## Executando com Docker
 
 O projeto também pode ser executado com Docker Compose. O compose sobe dois serviços:
@@ -134,11 +155,11 @@ O SQLite do backend é persistido no volume Docker `backend-data`.
 - Modal de sucesso para Enviar e Confirmar.
 - Modal de visualização do lote com dados do lote e lançamentos.
 - Modal de inclusão de lançamento com Reactive Forms.
-- Busca de conta corrente no backend e exibição do titular ao lado da lupa.
+- Busca de conta corrente no mock ou backend e exibição do titular ao lado da lupa.
 - Validação de campos obrigatórios no modal.
 - Validador customizado para valor monetário maior que zero.
 - Máscara monetária pt-BR no campo Valor do lançamento, por exemplo `1.500,02`.
-- Inclusão de lançamento persistida no SQLite.
+- Inclusão de lançamento em memória no modo mock ou persistida no SQLite no modo backend.
 - Atualização do valor e da quantidade de lançamentos do lote após inclusão.
 - Formatação de datas e valores em pt-BR.
 - Responsividade básica para telas menores.
@@ -206,6 +227,7 @@ dist/outros-creditos-debitos
 
 - O frontend foi componentizado em login, filtros, tabela de resultados e modal de lançamento.
 - A comunicação com a API fica isolada nos services Angular.
+- A origem dos dados é controlada por `useMock` em `src/environments/environment.ts`.
 - O backend usa FastAPI e `sqlite3` da biblioteca padrão para manter o desafio simples, local e fácil de executar.
 - Os dados iniciais são carregados no SQLite durante a inicialização do backend.
 - A paleta visual segue tons de verde-petróleo, com tokens globais em `src/styles.scss`.
