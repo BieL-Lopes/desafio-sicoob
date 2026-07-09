@@ -20,8 +20,8 @@
   max-height: calc(100vh - 56px);
   margin-top: 44px;
   overflow-y: auto;
-  border: 1px solid #ccd4d5;
-  background: #fff;
+  border: 1px solid var(--bds);
+  background: var(--sf);
 }
 
 header {
@@ -162,7 +162,7 @@ table {
 
 th {
   background: var(--pd);
-  color: #fff;
+  color: var(--st);
 }
 
 th,

@@ -172,7 +172,7 @@ nav {
   padding: 18px;
   border: 1px solid var(--bd);
   border-radius: var(--r-lg);
-  background: #fff;
+  background: var(--sf);
   box-shadow: var(--sh-card);
   transform: translate(-50%, -50%);
 }
@@ -303,7 +303,7 @@ nav {
   padding: 26px 24px 22px;
   border: 1px solid var(--bd);
   border-radius: var(--r-lg);
-  background: #fff;
+  background: var(--sf);
   box-shadow: var(--sh-card);
   transform: translate(-50%, -50%);
 }
@@ -355,7 +355,7 @@ nav {
     height: 30px;
     border: 1px solid var(--bdx);
     border-radius: 5px;
-    background: #fff;
+    background: var(--sf);
     cursor: pointer;
   }
 
