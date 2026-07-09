@@ -31,6 +31,13 @@ describe('LoteFiltersComponent', () => {
     expect(compiled.querySelector<HTMLButtonElement>('.collapse')?.getAttribute('aria-label')).toBe('Expandir filtros');
   });
 
+  it('uses white text on the green search button', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const searchButton = compiled.querySelector<HTMLButtonElement>('.search');
+
+    expect(getComputedStyle(searchButton!).color).toBe('rgb(255, 255, 255)');
+  });
+
   it('debounces search submissions before emitting filters', fakeAsync(() => {
     const emitted: unknown[] = [];
 

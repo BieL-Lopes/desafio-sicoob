@@ -63,4 +63,57 @@ describe('LancamentoModalComponent', () => {
     expect(compiled.textContent).not.toContain('CANCELAR');
     expect(compiled.textContent).toContain('INCLUIR');
   });
+
+  it('uses white text on the green include button', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const includeButton = compiled.querySelector<HTMLButtonElement>('button.primary');
+
+    expect(getComputedStyle(includeButton!).color).toBe('rgb(255, 255, 255)');
+  });
+
+  it('vertically aligns the account holder name with the search icon', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const titular = compiled.querySelector<HTMLElement>('.holder');
+    const style = getComputedStyle(titular!);
+
+    expect(style.display).toBe('flex');
+    expect(style.alignItems).toBe('center');
+    expect(style.minHeight).toBe('30px');
+  });
+
+  it('starts the inclusion form without prefilled user input', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const conta = compiled.querySelector<HTMLInputElement>('input[formcontrolname="contaCorrente"]');
+    const valor = compiled.querySelector<HTMLInputElement>('input[formcontrolname="valor"]');
+    const documento = compiled.querySelector<HTMLInputElement>('input[formcontrolname="documento"]');
+    const titular = compiled.querySelector<HTMLElement>('.holder');
+
+    expect(conta?.value).toBe('');
+    expect(valor?.value).toBe('');
+    expect(documento?.value).toBe('');
+    expect(titular?.textContent?.trim()).toBe('');
+  });
+
+  it('formats the value field as Brazilian money while typing', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const valor = compiled.querySelector<HTMLInputElement>('input[formcontrolname="valor"]')!;
+
+    valor.value = '150002';
+    valor.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(valor.value).toBe('1.500,02');
+    expect(fixture.componentInstance.form.controls.valor.value).toBe('1.500,02');
+  });
+
+  it('shows required field messages when include is clicked with invalid form', () => {
+    fixture.componentInstance.incluir();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Conta corrente é obrigatória.');
+    expect(compiled.textContent).toContain('Informe um valor monetário maior que zero.');
+    expect(compiled.textContent).toContain('Documento é obrigatório.');
+    expect(compiled.textContent).toContain('PA é obrigatório.');
+  });
 });

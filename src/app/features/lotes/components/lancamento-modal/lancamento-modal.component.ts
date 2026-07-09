@@ -26,14 +26,14 @@ export class LancamentoModalComponent {
   private readonly loteService = inject(LoteService);
 
   readonly form = this.fb.group({
-    contaCorrente: ['444444', [Validators.required]],
-    valor: ['25', [Validators.required, positiveMoneyValidator()]],
+    contaCorrente: ['', [Validators.required]],
+    valor: ['', [Validators.required, positiveMoneyValidator()]],
     historico: ['Lançamento Manual', [Validators.required]],
     estorno: [false],
-    documento: ['8075', [Validators.required]],
+    documento: ['', [Validators.required]],
     descricao: [''],
     situacao: [{ value: 'Pendente', disabled: true }],
-    pa: ['01', [Validators.required]]
+    pa: ['', [Validators.required]]
   });
 
   buscarConta(): void {
@@ -82,7 +82,7 @@ export class LancamentoModalComponent {
 
     this.form.patchValue({
       contaCorrente: lancamento.contaCorrente,
-      valor: String(lancamento.valor).replace('.', ','),
+      valor: this.formatMoneyAmount(lancamento.valor),
       historico: lancamento.historico,
       estorno: lancamento.estorno,
       documento: lancamento.documento,
@@ -92,9 +92,34 @@ export class LancamentoModalComponent {
     this.titular = lancamento.titular;
   }
 
+  protected formatarValor(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const formattedValue = this.formatMoneyInput(input.value);
+
+    input.value = formattedValue;
+    this.form.controls.valor.setValue(formattedValue, { emitEvent: false });
+  }
+
   protected hasError(controlName: keyof typeof this.form.controls): boolean {
     const control = this.form.controls[controlName];
     return control.invalid && (control.dirty || control.touched);
+  }
+
+  private formatMoneyInput(value: string): string {
+    const digits = value.replace(/\D/g, '');
+
+    if (!digits) {
+      return '';
+    }
+
+    return this.formatMoneyAmount(Number(digits) / 100);
+  }
+
+  private formatMoneyAmount(value: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value);
   }
 
   private toLancamento(): Lancamento {

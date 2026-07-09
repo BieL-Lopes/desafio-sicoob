@@ -25,6 +25,9 @@ export class AppComponent implements OnInit {
   loading = false;
   errorMessage = '';
   modalOpen = false;
+  visualizarModalOpen = false;
+  mobileMenuOpen = false;
+  successMessage = '';
 
   private readonly loteService = inject(LoteService);
   private readonly authService = inject(AuthService);
@@ -63,6 +66,13 @@ export class AppComponent implements OnInit {
     this.lotes = [];
     this.selectedIds.clear();
     this.modalOpen = false;
+    this.visualizarModalOpen = false;
+    this.mobileMenuOpen = false;
+    this.successMessage = '';
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 
   get selectedLote(): Lote | null {
@@ -124,6 +134,32 @@ export class AppComponent implements OnInit {
 
   hasSelection(): boolean {
     return this.selectedIds.size > 0;
+  }
+
+  confirmar(): void {
+    if (this.hasSelection()) {
+      this.successMessage = 'Confirmado com sucesso';
+    }
+  }
+
+  enviar(): void {
+    if (this.hasSelection()) {
+      this.successMessage = 'Enviado com sucesso';
+    }
+  }
+
+  closeSuccessModal(): void {
+    this.successMessage = '';
+  }
+
+  openVisualizarModal(): void {
+    if (this.hasSingleSelection()) {
+      this.visualizarModalOpen = true;
+    }
+  }
+
+  closeVisualizarModal(): void {
+    this.visualizarModalOpen = false;
   }
 
   openIncluirModal(): void {

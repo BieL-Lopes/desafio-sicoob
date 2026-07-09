@@ -16,15 +16,18 @@
           <input type="text" formControlName="contaCorrente" />
         </label>
         <button class="icon" type="button" aria-label="Buscar conta corrente" (click)="buscarConta()">⌕</button>
-        <span class="holder">{{ titular || 'Iris Maria Costa' }}</span>
+        <span class="holder">{{ titular }}</span>
       </div>
+      @if (hasError('contaCorrente')) {
+        <p class="error">Conta corrente é obrigatória.</p>
+      }
       @if (contaErro) {
         <p class="error">{{ contaErro }}</p>
       }
 
       <label class="short">
         <span>Valor *</span>
-        <input type="text" formControlName="valor" />
+        <input type="text" inputmode="numeric" formControlName="valor" (input)="formatarValor($event)" />
       </label>
       @if (hasError('valor')) {
         <p class="error">Informe um valor monetário maior que zero.</p>
@@ -38,6 +41,9 @@
           <option>Crédito Operacional</option>
         </select>
       </label>
+      @if (hasError('historico')) {
+        <p class="error">Histórico é obrigatório.</p>
+      }
 
       <label class="checkbox">
         <input type="checkbox" formControlName="estorno" />
@@ -68,11 +74,15 @@
       <label>
         <span>PA *</span>
         <select formControlName="pa">
+          <option value="">Selecione</option>
           <option value="01">01 - Unidade Sede</option>
           <option value="02">02 - Atendimento</option>
           <option value="03">03 - Retaguarda</option>
         </select>
       </label>
+      @if (hasError('pa')) {
+        <p class="error">PA é obrigatório.</p>
+      }
     </fieldset>
 
     <section class="lancamentos">

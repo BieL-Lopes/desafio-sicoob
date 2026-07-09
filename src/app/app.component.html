@@ -1,20 +1,36 @@
 @if (!isAuthenticated()) {
   <app-login (loginSuccess)="onLoginSuccess()" />
 } @else {
-  <aside class="sidebar">
+  <aside class="sidebar" [class.sidebar--open]="mobileMenuOpen">
     <div class="brand-icon">▦</div>
     <span>Contábil</span>
   </aside>
 
   <main class="page">
     <header class="page__header">
-      <div>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Abrir menu"
+        [attr.aria-expanded]="mobileMenuOpen"
+        (click)="toggleMobileMenu()"
+      >
+        <span aria-hidden="true"></span>
+      </button>
+
+      <div class="page__title">
         <h1>Outros Créditos/Débitos</h1>
         <nav aria-label="breadcrumb">Início › Outros Créditos/Débitos</nav>
       </div>
       <div class="session">
         <span>{{ usuario }}</span>
-        <button type="button" (click)="logout()">SAIR</button>
+        <button class="logout" type="button" aria-label="Sair" title="Sair" (click)="logout()">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M8 5H5v14h3" />
+            <path d="M12 8l4 4-4 4" />
+            <path d="M16 12H7" />
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -22,13 +38,15 @@
       <app-lote-filters (pesquisar)="pesquisar($event)" />
 
       <div class="actions" aria-label="Ações do lote">
-        <button type="button" [disabled]="!hasSelection()">CONFIRMAR</button>
-        <button type="button" [disabled]="!hasSelection()">ENVIAR</button>
+        <button type="button" data-action="confirmar" [disabled]="!hasSelection()" (click)="confirmar()">CONFIRMAR</button>
+        <button type="button" data-action="enviar" [disabled]="!hasSelection()" (click)="enviar()">ENVIAR</button>
         <button type="button" [disabled]="!hasSelection()">VISUALIZAR JUSTIFICATIVA</button>
         <button type="button" class="primary" (click)="openIncluirModal()">INCLUIR</button>
         <button type="button" [disabled]="!hasSingleSelection()">ALTERAR</button>
         <button type="button" [disabled]="!hasSingleSelection()">EXCLUIR</button>
-        <button type="button" [disabled]="!hasSingleSelection()">VISUALIZAR</button>
+        <button type="button" data-action="visualizar" [disabled]="!hasSingleSelection()" (click)="openVisualizarModal()">
+          VISUALIZAR
+        </button>
       </div>
 
       @if (errorMessage) {
@@ -53,6 +71,116 @@
         (closed)="closeModal()"
         (loteAtualizado)="updateLote($event)"
       />
+    }
+
+    @if (visualizarModalOpen) {
+      @if (selectedLote; as lote) {
+        <div class="view-backdrop" (click)="closeVisualizarModal()"></div>
+        <section class="view-modal" role="dialog" aria-modal="true" aria-labelledby="view-title">
+          <header class="view-modal__header">
+            <h2 id="view-title">VISUALIZAR LOTE</h2>
+            <button type="button" aria-label="Fechar" title="Fechar" (click)="closeVisualizarModal()">×</button>
+          </header>
+
+          <div class="view-grid">
+            <div>
+              <span>ID Lote</span>
+              <strong>{{ lote.idLote }}</strong>
+            </div>
+            <div>
+              <span>Data Entrada</span>
+              <strong>{{ lote.dataEntrada | date: 'dd/MM/yyyy' }}</strong>
+            </div>
+            <div>
+              <span>Valor</span>
+              <strong>{{ lote.valor | number: '1.2-2' : 'pt-BR' }}</strong>
+            </div>
+            <div>
+              <span>Quant. Lançamentos</span>
+              <strong>{{ lote.quantidadeLancamentos }}</strong>
+            </div>
+            <div>
+              <span>Usuário Registro</span>
+              <strong>{{ lote.usuarioRegistro }}</strong>
+            </div>
+            <div>
+              <span>Usuário Aprovação</span>
+              <strong>{{ lote.usuarioAprovacao || '-' }}</strong>
+            </div>
+            <div>
+              <span>Situação Lote</span>
+              <strong>{{ lote.situacaoLote }}</strong>
+            </div>
+            <div>
+              <span>Data/Hora Situação Lote</span>
+              <strong>{{ lote.dataHoraSituacaoLote | date: 'dd/MM/yyyy, HH:mm:ss' }}</strong>
+            </div>
+            <div>
+              <span>Instituição Resp.</span>
+              <strong>{{ lote.instituicaoResp }}</strong>
+            </div>
+            <div>
+              <span>Instituição</span>
+              <strong>{{ lote.instituicao }}</strong>
+            </div>
+          </div>
+
+          <div class="view-launches">
+            <h3>Lançamentos do lote</h3>
+            <div class="view-launches__scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Id Lançamento</th>
+                    <th>PA</th>
+                    <th>Conta Corrente</th>
+                    <th>Titular</th>
+                    <th>Histórico</th>
+                    <th>Valor</th>
+                    <th>Situação Documento CSC</th>
+                    <th>Retorno Proc.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (lancamento of lote.lancamentos; track lancamento.idLancamento) {
+                    <tr>
+                      <td>{{ lancamento.idLancamento }}</td>
+                      <td>{{ lancamento.pa }}</td>
+                      <td>{{ lancamento.contaCorrente }}</td>
+                      <td>{{ lancamento.titular }}</td>
+                      <td>{{ lancamento.historico }}</td>
+                      <td>{{ lancamento.valor | number: '1.2-2' : 'pt-BR' }}</td>
+                      <td>{{ lancamento.situacaoDocumentoCsc }}</td>
+                      <td>{{ lancamento.retornoProc || '-' }}</td>
+                    </tr>
+                  } @empty {
+                    <tr>
+                      <td colspan="8">Nenhum lançamento encontrado.</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <footer class="view-modal__footer">
+            <button type="button" (click)="closeVisualizarModal()">FECHAR</button>
+          </footer>
+        </section>
+      }
+    }
+
+    @if (successMessage) {
+      <div class="success-backdrop" (click)="closeSuccessModal()"></div>
+      <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="success-title">
+        <div class="success-modal__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <h2 id="success-title">{{ successMessage }}</h2>
+        <button type="button" (click)="closeSuccessModal()">OK</button>
+      </section>
     }
   </main>
 }

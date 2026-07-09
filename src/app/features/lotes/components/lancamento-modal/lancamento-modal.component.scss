@@ -76,6 +76,13 @@ label span,
   font-weight: 700;
 }
 
+.holder {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  align-self: end;
+}
+
 input,
 select,
 textarea {
@@ -178,6 +185,7 @@ button {
 button.primary {
   border-color: #007f73;
   background: #008a7b;
+  color: var(--st);
 }
 
 button:disabled {
