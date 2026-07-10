@@ -11,7 +11,11 @@ describe('LoteService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: APP_SETTINGS, useValue: { apiBaseUrl: 'http://127.0.0.1:8000', useMock: false } }
+      ]
     });
     service = TestBed.inject(LoteService);
     httpMock = TestBed.inject(HttpTestingController);

@@ -11,7 +11,11 @@ export interface Lancamento {
   documento: string;
   descricao: string;
   situacao: SituacaoLancamento;
+  idEvento?: string;
+  eventoCsc?: string;
+  complementoHistorico?: string;
   situacaoDocumentoCsc: string;
+  idDocCsc?: string;
   retornoProc: string;
 }
 

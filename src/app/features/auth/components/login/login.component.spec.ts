@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { APP_SETTINGS } from '../../../../shared/app-settings';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -11,7 +12,11 @@ describe('LoginComponent', () => {
     localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: APP_SETTINGS, useValue: { apiBaseUrl: 'http://127.0.0.1:8000', useMock: false } }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);

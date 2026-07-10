@@ -29,10 +29,10 @@ describe('LancamentoModalComponent', () => {
         contaCorrente: '444444',
         titular: 'Iris Maria Costa',
         valor: 1000,
-        historico: 'Lançamento Manual',
+        historico: 'Lancamento Manual',
         estorno: false,
         documento: '8075',
-        descricao: 'Crédito manual inicial',
+        descricao: 'Credito manual inicial',
         situacao: 'Pendente',
         situacaoDocumentoCsc: 'Pendente',
         retornoProc: ''
@@ -62,6 +62,12 @@ describe('LancamentoModalComponent', () => {
     expect(compiled.textContent).toContain('EXCLUIR');
     expect(compiled.textContent).not.toContain('CANCELAR');
     expect(compiled.textContent).toContain('INCLUIR');
+  });
+
+  it('keeps the launches table inside a dedicated responsive scroll area', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('.lancamentos__table > table')).not.toBeNull();
   });
 
   it('uses white text on the green include button', () => {
@@ -115,5 +121,51 @@ describe('LancamentoModalComponent', () => {
     expect(compiled.textContent).toContain('Informe um valor monetário maior que zero.');
     expect(compiled.textContent).toContain('Documento é obrigatório.');
     expect(compiled.textContent).toContain('PA é obrigatório.');
+    expect(compiled.textContent).toContain('Compl. Histórico é obrigatório.');
+  });
+
+  it('renders the expanded Documento CSC fields', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('select[formcontrolname="pa"]')).not.toBeNull();
+    expect(compiled.querySelector('input[formcontrolname="idEvento"]')).not.toBeNull();
+    expect(compiled.querySelector('textarea[formcontrolname="complementoHistorico"]')).not.toBeNull();
+    expect(compiled.querySelector('input[formcontrolname="situacaoDocumentoCsc"]')).not.toBeNull();
+    expect(compiled.querySelector('input[formcontrolname="idDocCsc"]')).not.toBeNull();
+  });
+
+  it('opens the event search modal, filters any column and confirms the selected event', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const buscarEvento = compiled.querySelector<HTMLButtonElement>('button[aria-label="Buscar evento CSC"]')!;
+
+    buscarEvento.click();
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('Pesquisa Evento');
+
+    const valor = compiled.querySelector<HTMLInputElement>('input[formcontrolname="valorPesquisa"]')!;
+    valor.value = 'credito';
+    valor.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('Centralizacao Titulo CSC Credito');
+
+    compiled.querySelector<HTMLTableRowElement>('.search-results tbody tr')?.click();
+    compiled.querySelector<HTMLButtonElement>('[data-action="confirmar-pesquisa"]')?.click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector<HTMLInputElement>('input[formcontrolname="idEvento"]')?.value).toBe('102');
+    expect(compiled.textContent).toContain('Centralizacao Titulo CSC Credito');
+  });
+
+  it('does not open a search modal for account search', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const buscarConta = compiled.querySelector<HTMLButtonElement>('button[aria-label="Buscar conta corrente"]')!;
+
+    buscarConta.click();
+    fixture.detectChanges();
+
+    expect(compiled.textContent).not.toContain('Pesquisa Conta Corrente');
+    expect(compiled.querySelector('.search-modal')).toBeNull();
   });
 });

@@ -6,6 +6,15 @@ import { Lancamento } from '../../models/lancamento.model';
 import { Lote } from '../../models/lote.model';
 import { LoteService } from '../../services/lote.service';
 
+interface PesquisaColuna {
+  key: string;
+  label: string;
+}
+
+interface PesquisaLinha {
+  values: Record<string, string>;
+}
+
 @Component({
   selector: 'app-lancamento-modal',
   standalone: true,
@@ -20,10 +29,25 @@ export class LancamentoModalComponent {
 
   protected titular = '';
   protected contaErro = '';
+  protected eventoDescricao = '';
+  protected eventoErro = '';
   protected salvando = false;
+  protected pesquisaAberta = false;
+  protected selectedPesquisaLinha: PesquisaLinha | null = null;
 
   private readonly fb = inject(FormBuilder);
   private readonly loteService = inject(LoteService);
+  private readonly eventosPesquisa: PesquisaLinha[] = [
+    {
+      values: {
+        idEvento: '102',
+        codEvento: '300',
+        descricao: 'Centralizacao Titulo CSC Credito',
+        dtInicio: '31/12/2019',
+        dtFim: ''
+      }
+    }
+  ];
 
   readonly form = this.fb.group({
     contaCorrente: ['', [Validators.required]],
@@ -33,7 +57,16 @@ export class LancamentoModalComponent {
     documento: ['', [Validators.required]],
     descricao: [''],
     situacao: [{ value: 'Pendente', disabled: true }],
-    pa: ['', [Validators.required]]
+    pa: ['', [Validators.required]],
+    idEvento: [''],
+    complementoHistorico: ['', [Validators.required]],
+    situacaoDocumentoCsc: [{ value: 'Aguardando Processamento CCO', disabled: true }],
+    idDocCsc: ['']
+  });
+
+  readonly pesquisaForm = this.fb.nonNullable.group({
+    campoPesquisa: ['ID Evento'],
+    valorPesquisa: ['']
   });
 
   buscarConta(): void {
@@ -49,6 +82,10 @@ export class LancamentoModalComponent {
         this.contaErro = error.message;
       }
     });
+  }
+
+  buscarEventoCsc(): void {
+    this.openPesquisaEvento();
   }
 
   incluir(): void {
@@ -87,9 +124,68 @@ export class LancamentoModalComponent {
       estorno: lancamento.estorno,
       documento: lancamento.documento,
       descricao: lancamento.descricao,
-      pa: lancamento.pa
+      pa: lancamento.pa,
+      idEvento: lancamento.idEvento ?? '',
+      complementoHistorico: lancamento.complementoHistorico ?? '',
+      idDocCsc: lancamento.idDocCsc ?? ''
     });
     this.titular = lancamento.titular;
+    this.eventoDescricao = lancamento.eventoCsc ?? '';
+  }
+
+  protected openPesquisaEvento(): void {
+    this.pesquisaAberta = true;
+    this.selectedPesquisaLinha = null;
+    this.pesquisaForm.reset({
+      campoPesquisa: 'ID Evento',
+      valorPesquisa: ''
+    });
+  }
+
+  protected closePesquisa(): void {
+    this.pesquisaAberta = false;
+    this.selectedPesquisaLinha = null;
+  }
+
+  protected selectPesquisaLinha(linha: PesquisaLinha): void {
+    this.selectedPesquisaLinha = linha;
+  }
+
+  protected confirmarPesquisa(): void {
+    if (!this.selectedPesquisaLinha) {
+      return;
+    }
+
+    this.form.patchValue({ idEvento: this.selectedPesquisaLinha.values['idEvento'] });
+    this.eventoDescricao = this.selectedPesquisaLinha.values['descricao'];
+    this.eventoErro = '';
+    this.closePesquisa();
+  }
+
+  protected pesquisaTitulo(): string {
+    return 'Pesquisa Evento';
+  }
+
+  protected pesquisaColunas(): PesquisaColuna[] {
+    return [
+      { key: 'idEvento', label: 'ID Evento' },
+      { key: 'codEvento', label: 'Cod. Evento' },
+      { key: 'descricao', label: 'Descricao' },
+      { key: 'dtInicio', label: 'Dt.Inicio' },
+      { key: 'dtFim', label: 'Dt.Fim' }
+    ];
+  }
+
+  protected pesquisaLinhas(): PesquisaLinha[] {
+    const valor = this.pesquisaForm.controls.valorPesquisa.value.trim().toLowerCase();
+
+    if (!valor) {
+      return this.eventosPesquisa;
+    }
+
+    return this.eventosPesquisa.filter((linha) =>
+      Object.values(linha.values).some((item) => item.toLowerCase().includes(valor))
+    );
   }
 
   protected formatarValor(event: Event): void {
@@ -137,7 +233,11 @@ export class LancamentoModalComponent {
       documento: raw.documento ?? '',
       descricao: raw.descricao ?? '',
       situacao: 'Pendente',
-      situacaoDocumentoCsc: 'Pendente',
+      idEvento: raw.idEvento ?? '',
+      eventoCsc: this.eventoDescricao,
+      complementoHistorico: raw.complementoHistorico ?? '',
+      situacaoDocumentoCsc: raw.situacaoDocumentoCsc ?? 'Aguardando Processamento CCO',
+      idDocCsc: raw.idDocCsc ?? '',
       retornoProc: ''
     };
   }

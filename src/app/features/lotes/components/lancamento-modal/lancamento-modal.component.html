@@ -71,6 +71,7 @@
 
     <fieldset>
       <legend>Documento CSC</legend>
+
       <label>
         <span>PA *</span>
         <select formControlName="pa">
@@ -83,6 +84,36 @@
       @if (hasError('pa')) {
         <p class="error">PA é obrigatório.</p>
       }
+
+      <div class="event-row">
+        <label>
+          <span>ID Evento</span>
+          <input type="text" formControlName="idEvento" />
+        </label>
+        <button class="icon" type="button" aria-label="Buscar evento CSC" (click)="buscarEventoCsc()">⌕</button>
+        <span class="event-description">{{ eventoDescricao }}</span>
+      </div>
+      @if (eventoErro) {
+        <p class="error">{{ eventoErro }}</p>
+      }
+
+      <label class="csc-complement">
+        <span>Compl. Histórico *</span>
+        <textarea rows="3" formControlName="complementoHistorico"></textarea>
+      </label>
+      @if (hasError('complementoHistorico')) {
+        <p class="error">Compl. Histórico é obrigatório.</p>
+      }
+
+      <label class="medium">
+        <span>Situação</span>
+        <input type="text" formControlName="situacaoDocumentoCsc" />
+      </label>
+
+      <label class="short">
+        <span>ID Doc CSC</span>
+        <input type="text" formControlName="idDocCsc" />
+      </label>
     </fieldset>
 
     <section class="lancamentos">
@@ -95,7 +126,8 @@
         <button type="button">EXCLUIR</button>
       </div>
 
-      <table>
+      <div class="lancamentos__table">
+        <table>
         <thead>
           <tr>
             <th>Id Lançamento</th>
@@ -126,7 +158,73 @@
             }
           }
         </tbody>
-      </table>
+        </table>
+      </div>
     </section>
   </form>
 </section>
+
+@if (pesquisaAberta) {
+  <button class="search-backdrop" type="button" aria-label="Fechar pesquisa" (click)="closePesquisa()"></button>
+  <section class="search-modal" role="dialog" aria-modal="true" aria-label="Pesquisa">
+    <h3>{{ pesquisaTitulo() }}</h3>
+
+    <form class="search-form" [formGroup]="pesquisaForm">
+      <label>
+        <span>Campo de busca</span>
+        <select formControlName="campoPesquisa">
+          @for (coluna of pesquisaColunas(); track coluna.key) {
+            <option>{{ coluna.label }}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        <span>Valor</span>
+        <input type="text" formControlName="valorPesquisa" />
+      </label>
+
+      <button class="primary" type="button">Listar</button>
+    </form>
+
+    <div class="search-results">
+      <table>
+        <thead>
+          <tr>
+            @for (coluna of pesquisaColunas(); track coluna.key) {
+              <th>{{ coluna.label }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (linha of pesquisaLinhas(); track linha.values[pesquisaColunas()[0].key]) {
+            <tr
+              [class.selected]="selectedPesquisaLinha === linha"
+              (click)="selectPesquisaLinha(linha)"
+              (dblclick)="selectPesquisaLinha(linha); confirmarPesquisa()"
+            >
+              @for (coluna of pesquisaColunas(); track coluna.key) {
+                <td>{{ linha.values[coluna.key] }}</td>
+              }
+            </tr>
+          } @empty {
+            <tr>
+              <td [attr.colspan]="pesquisaColunas().length">Nenhum registro encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="search-pagination">
+      <button type="button">Anterior</button>
+      <span>Pagina 1</span>
+      <button type="button">Proxima</button>
+    </div>
+
+    <footer class="search-actions">
+      <button class="primary" type="button" data-action="confirmar-pesquisa" (click)="confirmarPesquisa()">OK</button>
+      <button type="button" (click)="closePesquisa()">FECHAR</button>
+    </footer>
+  </section>
+}
