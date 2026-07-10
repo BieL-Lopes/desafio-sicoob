@@ -70,6 +70,80 @@ describe('LancamentoModalComponent', () => {
     expect(compiled.querySelector('.lancamentos__table > table')).not.toBeNull();
   });
 
+  it('keeps attachment actions inside the attachment section', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const lancamentoActions = compiled.querySelector<HTMLElement>('.lancamentos__actions')!;
+    const anexoActions = compiled.querySelector<HTMLElement>('.anexos__actions');
+
+    expect(anexoActions).not.toBeNull();
+    expect(lancamentoActions.textContent).not.toContain('VISUALIZAR');
+    expect(lancamentoActions.textContent).not.toContain('EXCLUIR');
+    expect(lancamentoActions.textContent).toContain('DUPLICAR');
+    expect(lancamentoActions.textContent).toContain('INCLUIR');
+    expect(lancamentoActions.textContent).toContain('ALTERAR');
+    expect(lancamentoActions.textContent).toContain('FECHAR');
+    expect(anexoActions?.textContent).toContain('VISUALIZAR');
+    expect(anexoActions?.textContent).toContain('INCLUIR');
+    expect(anexoActions?.textContent).toContain('EXCLUIR');
+  });
+
+  it('renders attachment table headers with readable Portuguese text', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const headerText = compiled.querySelector<HTMLElement>('.anexos__table thead')?.textContent ?? '';
+
+    expect(headerText).toContain('Nome Reduzido do Arquivo');
+    expect(headerText).toContain('Descrição');
+    expect(headerText).toContain('Data Inclusão');
+    expect(headerText).toContain('ID Usuário');
+  });
+
+  it('adds a selected file to the attachments grid', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const input = compiled.querySelector<HTMLInputElement>('input[data-role="anexo-input"]')!;
+    const file = new File(['conteudo'], 'test-incluir.pdf', { type: 'application/pdf' });
+
+    Object.defineProperty(input, 'files', { value: [file], configurable: true });
+    input.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('test-incluir.pdf');
+    expect(compiled.textContent).toContain('admin');
+    expect(compiled.textContent).not.toContain('Nenhum registro encontrado.');
+  });
+
+  it('deletes the selected attachment from the grid', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const input = compiled.querySelector<HTMLInputElement>('input[data-role="anexo-input"]')!;
+    const file = new File(['conteudo'], 'remover.pdf', { type: 'application/pdf' });
+
+    Object.defineProperty(input, 'files', { value: [file], configurable: true });
+    input.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    compiled.querySelector<HTMLButtonElement>('button[data-action="excluir-anexo"]')?.click();
+    fixture.detectChanges();
+
+    expect(compiled.textContent).not.toContain('remover.pdf');
+    expect(compiled.textContent).toContain('Nenhum registro encontrado.');
+  });
+
+  it('opens the selected attachment for viewing', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const input = compiled.querySelector<HTMLInputElement>('input[data-role="anexo-input"]')!;
+    const file = new File(['conteudo'], 'visualizar.pdf', { type: 'application/pdf' });
+    const createObjectUrlSpy = spyOn(URL, 'createObjectURL').and.returnValue('blob:visualizar');
+    const openSpy = spyOn(window, 'open');
+
+    Object.defineProperty(input, 'files', { value: [file], configurable: true });
+    input.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    compiled.querySelector<HTMLButtonElement>('button[data-action="visualizar-anexo"]')?.click();
+
+    expect(createObjectUrlSpy).toHaveBeenCalledWith(file);
+    expect(openSpy).toHaveBeenCalledWith('blob:visualizar', '_blank', 'noopener');
+  });
+
   it('uses white text on the green include button', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const includeButton = compiled.querySelector<HTMLButtonElement>('button.primary');

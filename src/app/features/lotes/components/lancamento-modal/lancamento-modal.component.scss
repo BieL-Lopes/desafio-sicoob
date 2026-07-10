@@ -167,8 +167,78 @@ textarea {
 
 .lancamentos__actions {
   display: grid;
-  grid-template-columns: auto 1fr repeat(4, auto);
+  grid-template-columns: auto 1fr repeat(3, auto);
   gap: 6px;
+}
+
+.anexos {
+  align-content: start;
+}
+
+.anexos__title {
+  margin: 18px 0 0;
+  color: #263d42;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.anexos__table {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.anexos__table table {
+  table-layout: fixed;
+}
+
+.anexos__table th:nth-child(1),
+.anexos__table td:nth-child(1) {
+  width: 38%;
+}
+
+.anexos__table th:nth-child(2),
+.anexos__table td:nth-child(2) {
+  width: 25%;
+}
+
+.anexos__table th:nth-child(3),
+.anexos__table td:nth-child(3) {
+  width: 25%;
+}
+
+.anexos__table th:nth-child(4),
+.anexos__table td:nth-child(4) {
+  width: 12%;
+}
+
+.anexos__table td[colspan] {
+  height: 88px;
+  color: #7a8789;
+  text-align: center;
+}
+
+.anexos__row {
+  cursor: pointer;
+}
+
+.anexos__table tbody tr.selected,
+.anexos__row:hover {
+  background: var(--rows);
+}
+
+.anexos__input {
+  display: none;
+}
+
+.anexos__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.anexos__actions button {
+  min-width: 86px;
 }
 
 .lancamentos__table {
@@ -348,6 +418,27 @@ button:disabled {
 
   .lancamentos__actions {
     gap: 8px;
+  }
+
+  .anexos__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .anexos__table {
+    overflow-x: hidden;
+  }
+
+  .anexos__table table {
+    min-width: 0;
+    font-size: 9px;
+  }
+
+  .anexos__table th,
+  .anexos__table td {
+    padding: 4px;
+    line-height: 1.2;
   }
 
   .lancamentos__actions button {

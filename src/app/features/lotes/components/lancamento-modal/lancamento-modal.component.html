@@ -116,14 +116,66 @@
       </label>
     </fieldset>
 
+    <fieldset class="anexos">
+      <legend>Anexo</legend>
+
+      <p class="anexos__title">ANEXOS</p>
+
+      <div class="anexos__table">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome Reduzido do Arquivo</th>
+              <th>Descri&ccedil;&atilde;o</th>
+              <th>Data Inclus&atilde;o</th>
+              <th>ID Usu&aacute;rio</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (!anexos.length) {
+              <tr class="anexos__empty">
+                <td colspan="4">Nenhum registro encontrado.</td>
+              </tr>
+            } @else {
+              @for (anexo of anexos; track anexo.id) {
+                <tr class="anexos__row" [class.selected]="selectedAnexo === anexo" (click)="selecionarAnexo(anexo)">
+                  <td>{{ anexo.nomeReduzidoArquivo }}</td>
+                  <td>{{ anexo.descricao }}</td>
+                  <td>{{ anexo.dataInclusao }}</td>
+                  <td>{{ anexo.idUsuario }}</td>
+                </tr>
+              }
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <input
+        #anexoInput
+        class="anexos__input"
+        data-role="anexo-input"
+        type="file"
+        (change)="incluirAnexo($event)"
+      />
+
+      <div class="anexos__actions">
+        <button type="button" data-action="visualizar-anexo" [disabled]="!selectedAnexo" (click)="visualizarAnexo()">
+          VISUALIZAR
+        </button>
+        <button type="button" (click)="abrirSeletorAnexo(anexoInput)">INCLUIR</button>
+        <button type="button" data-action="excluir-anexo" [disabled]="!selectedAnexo" (click)="excluirAnexo()">
+          EXCLUIR
+        </button>
+      </div>
+    </fieldset>
+
     <section class="lancamentos">
       <div class="lancamentos__actions">
         <button type="button" (click)="duplicar()">DUPLICAR</button>
         <span></span>
-        <button type="button">VISUALIZAR</button>
         <button class="primary" type="button" (click)="incluir()" [disabled]="salvando">INCLUIR</button>
         <button type="button">ALTERAR</button>
-        <button type="button">EXCLUIR</button>
+        <button type="button" (click)="closed.emit()">FECHAR</button>
       </div>
 
       <div class="lancamentos__table">

@@ -15,6 +15,15 @@ interface PesquisaLinha {
   values: Record<string, string>;
 }
 
+interface Anexo {
+  id: number;
+  nomeReduzidoArquivo: string;
+  descricao: string;
+  dataInclusao: string;
+  idUsuario: string;
+  file: File;
+}
+
 @Component({
   selector: 'app-lancamento-modal',
   standalone: true,
@@ -34,9 +43,12 @@ export class LancamentoModalComponent {
   protected salvando = false;
   protected pesquisaAberta = false;
   protected selectedPesquisaLinha: PesquisaLinha | null = null;
+  protected anexos: Anexo[] = [];
+  protected selectedAnexo: Anexo | null = null;
 
   private readonly fb = inject(FormBuilder);
   private readonly loteService = inject(LoteService);
+  private nextAnexoId = 1;
   private readonly eventosPesquisa: PesquisaLinha[] = [
     {
       values: {
@@ -133,6 +145,54 @@ export class LancamentoModalComponent {
     this.eventoDescricao = lancamento.eventoCsc ?? '';
   }
 
+  protected abrirSeletorAnexo(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  protected incluirAnexo(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const anexo: Anexo = {
+      id: this.nextAnexoId++,
+      nomeReduzidoArquivo: file.name,
+      descricao: file.name,
+      dataInclusao: this.formatDateTime(new Date()),
+      idUsuario: 'admin',
+      file
+    };
+
+    this.anexos = [...this.anexos, anexo];
+    this.selectedAnexo = anexo;
+    input.value = '';
+  }
+
+  protected selecionarAnexo(anexo: Anexo): void {
+    this.selectedAnexo = anexo;
+  }
+
+  protected visualizarAnexo(): void {
+    if (!this.selectedAnexo) {
+      return;
+    }
+
+    const url = URL.createObjectURL(this.selectedAnexo.file);
+    window.open(url, '_blank', 'noopener');
+  }
+
+  protected excluirAnexo(): void {
+    if (!this.selectedAnexo) {
+      return;
+    }
+
+    this.anexos = this.anexos.filter((anexo) => anexo.id !== this.selectedAnexo?.id);
+    this.selectedAnexo = null;
+  }
+
   protected openPesquisaEvento(): void {
     this.pesquisaAberta = true;
     this.selectedPesquisaLinha = null;
@@ -216,6 +276,18 @@ export class LancamentoModalComponent {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(value);
+  }
+
+  private formatDateTime(value: Date): string {
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+      .format(value)
+      .replace(',', '');
   }
 
   private toLancamento(): Lancamento {
